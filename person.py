@@ -4,13 +4,13 @@ from random import random
 class Person:
     def __init__(self, _id):
         self.id = _id
-        self.vaccinated = False
-        self.interact_dict = []
+        self.vaccinated = []
+        self.interact_list = []
         self.viruses = []
 
     # if not vaccinated and not infected, list of infectors
 
-    def update(self, virus):
+    def update(self):
         if self.vaccinated:
             # log not because of vaccine
             return make_stat('vaccinated')
