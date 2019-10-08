@@ -14,24 +14,30 @@ class Person:
     def update(self, virus):
         if self.vaccinated:
             # log not because of vaccine
-            return self.id, 'vaccinated'
+            return make_stat('vaccinated')
 
         if self.infected:
             # log not because already infected
-            return self.id, 'infected'
+            return make_stat('infected')
+
+        return make_stat(**is_infected)
 
     
     def end_step(self):
         self.interact_list = []
 
-    def is_infected(self):
-        which_infected = [
+    def which_infected(self, virus):
+        num_infectors = len(self.interact_list)
+
+        infectors = [
             interactor.id for interactor in self.interact_list 
             if random() <= virus.infect_rate
         ]
-                # log infected by interaction with which_infected
+        if infectors:
+            return {'status': 'newly infected', 'infector_list': infectors}
 
+        return {'status': 'resisted'}
 
-        self.infected = True
-
-
+    def make_stat(self, status, infector_list = []):
+        
+        return [self.id, status, infector_list, len(self.interact_list)]
