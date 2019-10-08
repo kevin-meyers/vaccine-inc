@@ -5,18 +5,17 @@ class Person:
     def __init__(self, _id):
         self.id = _id
         self.vaccinated = False
-        self.infected = False
-        self.interact_list = []
+        self.interact_dict = []
+        self.viruses = []
 
     # if not vaccinated and not infected, list of infectors
-
 
     def update(self, virus):
         if self.vaccinated:
             # log not because of vaccine
             return make_stat('vaccinated')
 
-        if self.infected:
+        if self.viruses:
             # log not because already infected
             return make_stat('infected')
 
