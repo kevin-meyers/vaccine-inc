@@ -21,7 +21,6 @@ class Person:
 
         return make_stat(**is_infected)
 
-    
     def end_step(self):
         self.interact_list = []
 
@@ -29,7 +28,7 @@ class Person:
         num_infectors = len(self.interact_list)
 
         infectors = [
-            interactor.id for interactor in self.interact_list 
+            interactor.id for interactor in self.interact_list
             if random() <= virus.infect_rate
         ]
         if infectors:
@@ -38,5 +37,4 @@ class Person:
         return {'status': 'resisted'}
 
     def make_stat(self, status, infector_list = []):
-        
         return [self.id, status, infector_list, len(self.interact_list)]
