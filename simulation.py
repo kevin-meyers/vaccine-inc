@@ -16,7 +16,6 @@ class simulation:
     def __init__(self, population, viruses, pop_density=100):
         self.pop_size = population
         self.persons_list = []
-        self.num_init_infect = num_initial_infect
         self.infected = []
         self.pop_density = pop_density # how many people they interact with in a step
         self.frame_num = 0
@@ -25,6 +24,7 @@ class simulation:
     def next_frame(self):
         self.frame_num += 1
         establish_interactions()
+        stat_stuff()
 
     def stat_stuff(self):
         with open(self.file_name, 'a') as f:
@@ -33,10 +33,16 @@ class simulation:
                 writer.writerow([self.frame_num] + person.update())
 
     def establish_interactions(self):
-        for virus, persindices in self.infected.items():
-            for persindex in persindices:
-                for person in sample(self.persons_list, k=self.pop_density):
-                    person.interact_list.append([virus, persindex]) # wyatt mad here
+        # for virus, persindices in self.infected.items():
+        #    for persindex in persindices:
+        flattened_infected = [
+            (virus, persindex) for virus, persindices in self.infected.items()
+            for persindex in persindices
+        ]
+
+        for virus, persindex in flattened_infected:
+            for person in sample(self.persons_list, k=self.pop_density):
+                person.interact_list.append([virus, persindex]) # wyatt mad here
 
 
     def sim_start(self):
@@ -60,10 +66,12 @@ class simulation:
             )
 
     def vaccinate_poulation(self):
-        for virus in self.viruses:
-            for person in persons:
-                if virus in person.viruses:
-                    continue
+        virus_persons = [
+            (virus, person) for person in self.persons_list for virus in self.viruses
+        ]
+        for virus, person in virus_persons:
+            if virus in person.viruses:
+                continue
 
-                if random() <= virus.vaccination_rate:
-                    person.vaccinated.append(virus)
+            if random() <= virus.vaccination_rate:
+                person.vaccinated.append(virus)
