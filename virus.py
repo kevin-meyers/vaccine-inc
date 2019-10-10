@@ -1,12 +1,14 @@
 
 
 class Virus:
-    def __init__(self, name, infect_rate, num_infected, fatality_rate, lifetime):
+    def __init__(self, name, infect_rate, num_infected, fatality_rate,
+                 lifetime, vaccination_rate):
         self.name = name
         self.infect_rate = infect_rate
         self.num_infected = num_infected
         self.fatality_rate = self.per_turn_fatality(fatality_rate, lifetime)
         self.lifetime = lifetime
+        self.vaccination_rate = vaccination_rate
 
     @staticmethod
     def per_turn_fatality(fatality_rate, lifetime):

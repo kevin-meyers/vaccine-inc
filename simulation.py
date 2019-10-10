@@ -1,12 +1,16 @@
 import csv
-from datetime.datetime import now
+from datetime import datetime
 
 from random import sample, random
 
 from person import Person
 
 
-class simulation:
+FIELD_NAMES = ['frame', 'id', 'status', 'infectors_dict', 'num_interactions',
+               'vaccines', 'died_to']
+
+
+class Simulation:
     '''
     Runs a single simulation till there are no more infected.
 
@@ -20,24 +24,27 @@ class simulation:
         self.pop_density = pop_density # how many people they interact with in a step
         self.frame_num = 0
         self.file_name = None
+        self.viruses = viruses
 
     def next_frame(self):
         self.frame_num += 1
-        establish_interactions()
-        stat_stuff()
+        self.establish_interactions()
+        self.stat_stuff()
 
     def stat_stuff(self):
         with open(self.file_name, 'a') as f:
-            writer = csv.writer(f)
+            writer = csv.DictWriter(f, FIELD_NAMES)
             for person in self.persons_list:
-                writer.writerow([self.frame_num] + person.update())
+                writer.writerow(
+                    {**{'frame': self.frame_num}, **person.update()}
+                )
 
     def establish_interactions(self):
         # for virus, persindices in self.infected.items():
         #    for persindex in persindices:
         flattened_infected = [
-            (virus, persindex) for virus, persindices in self.infected.items()
-            for persindex in persindices
+            (virus_dict['virus'], persindex) for virus_dict in self.infected
+            for persindex in virus_dict['persindices']
         ]
 
         for virus, persindex in flattened_infected:
@@ -49,11 +56,11 @@ class simulation:
         self.persons_list = [Person(_id) for _id in range(self.pop_size)]
         self.infect_population()
         self.vaccinate_population()
-        self.file_name = f'sim-log-{now().strftime("%m-%d-%Y.%H:%M:%S")}'
+        self.file_name = f'data/sim-log-{datetime.now().strftime("%m-%d-%Y.%H:%M:%S")}'
 
         with open(self.file_name, 'w') as f:
             writer = csv.writer(f)
-            f.writerow(['frame', 'id', 'status', 'num_interactions', 'infectors'])
+            writer.writerow(['frame', 'id', 'status', 'num_interactions', 'infectors'])
 
     def infect_population(self):
         for virus in self.viruses:
@@ -65,7 +72,7 @@ class simulation:
                 }
             )
 
-    def vaccinate_poulation(self):
+    def vaccinate_population(self):
         virus_persons = [
             (virus, person) for person in self.persons_list for virus in self.viruses
         ]

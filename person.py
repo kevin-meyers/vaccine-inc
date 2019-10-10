@@ -9,7 +9,7 @@ class Person:
         self.interact_list = []
         self.viruses = []
         self.stats = {
-            'id': self._id,
+            'id': _id,
             'status': '',
             'infectors_dict': defaultdict(lambda: []),
             'num_interactions': 0,
@@ -30,7 +30,7 @@ class Person:
             self.stats['status'] = 'infected'
             return self.stats
 
-        self.stats.update(is_infected)
+        self.stats.update(self.which_infected())
         return self.stats
 
     def end_step(self):
@@ -47,23 +47,17 @@ class Person:
                 self.viruses[i][1] -= 1
 
                 if self.viruses[i][1] <= 0:
+                    self.vaccinated.append(virus)
+                    self.stats['vaccines'].append(virus.name)
                     self.viruses.pop(i)
 
 
-            
+    def which_infected(self):
+        for virus, _id in self.interact_list:
+            if random() <= virus.infect_rate:
+                self.stats['infectors_dict'][virus.name].append(_id)
+                self.stats['status'] = 'newly infected'
+                self.viruses.append([virus, virus.lifetime])
 
-    def which_infected(self, virus):
-        for interactor in self.interact_list:
-            for virus, _ in interactor.viruses:
-                if random() <= virus.infect_rate:
-                    self.stats['infectors_dict'][virus.name].append(interactor.id)
-                    self.viruses.append([virus, virus.lifetime])
-
-        infectors = [
-            interactor.id for interactor in self.interact_list
-            if random() <= virus.infect_rate
-        ]
-        if infectors:
-            return {'status': 'newly infected', 'infector_list': infectors}
 
         return {'status': 'resisted'}
