@@ -13,7 +13,6 @@ class Person:
     # if not vaccinated and not infected, list of infectors
 
     def update(self):
-        self.interact_list = []
         self.stats = {
             'id': self.id,
             'status': 'healthy',
@@ -36,6 +35,7 @@ class Person:
             self.stats['status'] = 'infected'
             return self.pretty_stats()
 
+        self.which_infected()
         return self.pretty_stats()
 
     def end_step(self):
@@ -48,13 +48,21 @@ class Person:
                 self.stats['died_to'].append(self.viruses[j][0].name)
 
         if not self.dead:
-            for i in range(-len(self.viruses)):
+            delete_list = []
+            for i in range(len(self.viruses)):
+                print(self.viruses, i)
                 self.viruses[i][1] -= 1
 
                 if self.viruses[i][1] <= 0:
-                    self.vaccinated.append(self.viruses[i][1])
-                    self.stats['vaccines'].append(self.viruses[i][1].name)
-                    self.viruses.pop(i)
+                    self.vaccinated.append(self.viruses[i][0])
+                    self.stats['vaccines'].append(self.viruses[i][0].name)
+                    delete_list.append(i)
+
+            for i in delete_list[::-1]:
+                self.viruses.pop(i)
+
+        else:
+            self.viruses = []
 
     def which_infected(self):
         for virus, _id in self.interact_list:
@@ -68,4 +76,5 @@ class Person:
 
     def pretty_stats(self):
         self.stats['infectors_dict'] = dict(self.stats['infectors_dict'])
+        self.end_step()
         return self.stats
