@@ -66,6 +66,8 @@ class Simulation:
                 writer.writerow(
                     {**{'frame': self.frame_num}, **person.update(self.infected)}
                 )
+        self.rebuild_viruses()
+
 
 
     def rebuild_viruses(self):
@@ -78,7 +80,7 @@ class Simulation:
         #    for persindex in persindices:
         flattened_infected = [
             (virus_dict['virus'], persindex) for virus_dict in self.infected # YOU NEED FIX HERE
-            for persindex in virus_dict['persindices']
+            for persindex in virus_dict['persindices'].list
         ]
 
         for virus, persindex in flattened_infected:
