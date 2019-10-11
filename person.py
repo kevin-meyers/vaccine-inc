@@ -66,7 +66,7 @@ class Person:
                     delete_list.append(i)
 
                 for infections in sim_infected:
-                    if viruses[i][0].name == infections['virus'].name:
+                    if self.viruses[i][0].name == infections['virus'].name:
                         infections['persindices'].remove(self.id, True)
 
             for i in delete_list[::-1]:
