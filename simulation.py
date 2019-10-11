@@ -10,6 +10,32 @@ FIELD_NAMES = ['frame', 'id', 'status', 'infectors_dict', 'num_interactions',
                'vaccines', 'died_to']
 
 
+# Like a list, but kewler
+class Kewlist:
+
+    def __init__(self, length, start_val = False):
+        self.list = []
+        self.bools = [start_val] * length
+
+    def append(self, index, queue = False):
+        self.bools[index] = True
+        if not queue:
+            self.rebuild()
+
+    def remove(self, index, queue = False):
+        self.bools[index] = False
+        if not queue:
+            self.rebuild()
+
+    def set_to(self, index, value = True):
+        self.bools[index] = value
+
+    def rebuild(self):
+        self.list = []
+        for i in range(len(self.bools)):
+            if self.bools[i]:
+                self.list.append(i)
+
 class Simulation:
     '''
     Runs a single simulation till there are no more infected.
@@ -21,10 +47,12 @@ class Simulation:
         self.pop_size = population
         self.persons_list = []
         self.infected = []
-        self.pop_density = pop_density # how many people they interact with in a step
+        self.pop_density = pop_density  # how many people they interact with in a step
         self.frame_num = 0
         self.file_name = None
         self.viruses = viruses
+
+        self.nfctr_array = [[False]*population]*viruses
 
     def next_frame(self):
         self.frame_num += 1
@@ -36,14 +64,15 @@ class Simulation:
             writer = csv.DictWriter(f, FIELD_NAMES)
             for person in self.persons_list:
                 writer.writerow(
-                    {**{'frame': self.frame_num}, **person.update()}
+                    {**{'frame': self.frame_num}, **person.update(self.infected)}
                 )
+
 
     def establish_interactions(self):
         # for virus, persindices in self.infected.items():
         #    for persindex in persindices:
         flattened_infected = [
-            (virus_dict['virus'], persindex) for virus_dict in self.infected
+            (virus_dict['virus'], persindex) for virus_dict in self.infected # YOU NEED FIX HERE
             for persindex in virus_dict['persindices']
         ]
 
@@ -63,8 +92,11 @@ class Simulation:
             writer.writerow(['frame', 'id', 'status', 'num_interactions', 'infectors'])
 
     def infect_population(self):
+        the_chosen = Kewlist(self.pop_size)
         for virus in self.viruses:
-            the_chosen = sample(range(len(self.persons_list)), k=virus.num_infected)
+            for persindex in sample(range(len(self.persons_list)), k=virus.num_infected):
+                the_chosen.append(persindex, True)
+            the_chosen.rebuild()
 
             self.infected.append(
                 {
@@ -72,7 +104,7 @@ class Simulation:
                     'persindices': the_chosen
                 }
             )
-            for persindex in the_chosen:
+            for persindex in the_chosen.list:
                 self.persons_list[persindex].viruses.append([virus,
                                                              virus.lifetime])
 

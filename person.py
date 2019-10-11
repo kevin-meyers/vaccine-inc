@@ -12,7 +12,7 @@ class Person:
 
     # if not vaccinated and not infected, list of infectors
 
-    def update(self):
+    def update(self, sim_infected):
         self.stats = {
             'id': self.id,
             'status': 'healthy',
@@ -21,7 +21,7 @@ class Person:
             'vaccines': [],
             'died_to': []
         }
-        self.dot()
+        self.dot(sim_infected)
 
         if self.dead:
             self.stats['status'] = 'dead'
@@ -41,7 +41,7 @@ class Person:
     def end_step(self):
         self.interact_list = []
 
-    def dot(self):
+    def dot(self, sim_infected):
         for j in range(len(self.viruses)):
             if random() <= self.viruses[j][0].fatality_rate:
                 self.dead = True
@@ -61,8 +61,10 @@ class Person:
             for i in delete_list[::-1]:
                 self.viruses.pop(i)
 
-        else:
+        else:  # self is DEAD
             self.viruses = []
+            for virus in sim_infected:
+                virus['persindices'].remove(self.id, True)
 
     def which_infected(self):
         for virus, _id in self.interact_list:
