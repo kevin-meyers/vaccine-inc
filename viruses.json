@@ -1,2 +1,2 @@
-{"name": "Ebola", "infect_rate": 0.1, "num_infected": 10, "fatality_rate": 0.5, "lifetime": 4}
-
+{"name": "Ebola", "infect_rate": 0.1, "num_infected": 10, "fatality_rate": 0.5, "lifetime": 8, "vaccination_rate": 0.4}
+{"name": "Flu", "infect_rate": 0.6, "num_infected": 10, "fatality_rate": 0.1, "lifetime": 3, "vaccination_rate": 0.7}

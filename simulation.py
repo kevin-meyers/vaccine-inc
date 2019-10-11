@@ -1,4 +1,6 @@
 import csv
+import json
+
 from datetime import datetime
 
 from random import sample, random
@@ -130,3 +132,13 @@ class Simulation:
 
             if random() <= virus.vaccination_rate:
                 person.vaccinated.append(virus)
+
+if __name__ == '__main__':
+    with open('viruses.json', 'r') as f:
+        viruses = [json.loads(line) for line in f]
+
+    with open('simcard.json', 'r') as f:
+        simcard = json.loads(f.read())
+
+    e_sim = Simulation(**simcard, viruses=viruses)
+
