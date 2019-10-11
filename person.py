@@ -42,20 +42,19 @@ class Person:
         self.interact_list = []
 
     def dot(self):
-        for virus, lifetime in self.viruses:
-            if random() <= virus.fatality_rate:
+        for j in range(len(self.viruses)):
+            if random() <= self.viruses[j][0].fatality_rate:
                 self.dead = True
-                self.stats['died_to'].append(virus.name)
+                self.stats['died_to'].append(self.viruses[j][0].name)
 
         if not self.dead:
             for i in range(-len(self.viruses)):
                 self.viruses[i][1] -= 1
 
                 if self.viruses[i][1] <= 0:
-                    self.vaccinated.append(virus)
-                    self.stats['vaccines'].append(virus.name)
+                    self.vaccinated.append(self.viruses[i][1])
+                    self.stats['vaccines'].append(self.viruses[i][1].name)
                     self.viruses.pop(i)
-
 
     def which_infected(self):
         for virus, _id in self.interact_list:
