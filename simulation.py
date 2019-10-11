@@ -17,6 +17,11 @@ class Kewlist:
         self.list = []
         self.bools = [start_val] * length
 
+    def call_for_list(self, build = True):
+        if build:
+            self.rebuild()
+        return self.list
+
     def append(self, index, queue = False):
         self.bools[index] = True
         if not queue:
