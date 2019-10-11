@@ -52,7 +52,7 @@ class Simulation:
         self.file_name = None
         self.viruses = viruses
 
-        self.nfctr_array = [[False]*population]*viruses
+        self.nfctr_array = [[False]*population]*len(viruses)
 
     def next_frame(self):
         self.frame_num += 1

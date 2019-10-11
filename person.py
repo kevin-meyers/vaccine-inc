@@ -58,7 +58,6 @@ class Person:
         if not self.dead:
             delete_list = []
             for i in range(len(self.viruses)):
-                print(self.viruses, i)
                 self.viruses[i][1] -= 1
 
                 if self.viruses[i][1] <= 0:
