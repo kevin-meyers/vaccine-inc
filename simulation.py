@@ -64,13 +64,17 @@ class Simulation:
 
     def infect_population(self):
         for virus in self.viruses:
+            the_chosen = sample(range(len(self.persons_list)), k=virus.num_infected)
+
             self.infected.append(
                 {
                     'virus': virus,
-                    'persindices': sample(range(len(self.persons_list)),
-                                          k=virus.num_infected)
+                    'persindices': the_chosen
                 }
             )
+            for persindex in the_chosen:
+                self.persons_list[persindex].viruses.append([virus,
+                                                             virus.lifetime])
 
     def vaccinate_population(self):
         virus_persons = [

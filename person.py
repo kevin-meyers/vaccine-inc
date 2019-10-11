@@ -8,42 +8,47 @@ class Person:
         self.vaccinated = []
         self.interact_list = []
         self.viruses = []
+        self.dead = False
+
+    # if not vaccinated and not infected, list of infectors
+
+    def update(self):
+        self.interact_list = []
         self.stats = {
-            'id': _id,
-            'status': '',
+            'id': self.id,
+            'status': 'healthy',
             'infectors_dict': defaultdict(lambda: []),
             'num_interactions': 0,
             'vaccines': [],
             'died_to': []
         }
+        self.dot()
 
+        if self.dead:
+            self.stats['status'] = 'dead'
+            return self.pretty_stats()
 
-
-    # if not vaccinated and not infected, list of infectors
-
-    def update(self):
         if self.vaccinated:
             self.stats['status'] = 'vaccinated'
-            return self.stats
+            return self.pretty_stats()
 
         if self.viruses:
             self.stats['status'] = 'infected'
-            return self.stats
+            return self.pretty_stats()
 
-        self.stats.update(self.which_infected())
-        return self.stats
+        return self.pretty_stats()
 
     def end_step(self):
         self.interact_list = []
 
     def dot(self):
-        for virus in self.viruses:
+        for virus, lifetime in self.viruses:
             if random() <= virus.fatality_rate:
                 self.dead = True
                 self.stats['died_to'].append(virus.name)
 
         if not self.dead:
-            for i in range(-len(self.virus)):
+            for i in range(-len(self.viruses)):
                 self.viruses[i][1] -= 1
 
                 if self.viruses[i][1] <= 0:
@@ -59,5 +64,9 @@ class Person:
                 self.stats['status'] = 'newly infected'
                 self.viruses.append([virus, virus.lifetime])
 
+        if not self.stats['infectors_dict']:
+            self.stats['status'] = 'resisted'
 
-        return {'status': 'resisted'}
+    def pretty_stats(self):
+        self.stats['infectors_dict'] = dict(self.stats['infectors_dict'])
+        return self.stats
