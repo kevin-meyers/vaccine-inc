@@ -68,6 +68,11 @@ class Simulation:
                 )
 
 
+    def rebuild_viruses(self):
+        for virus in self.infected:
+            virus['persindices'].rebuild()
+
+
     def establish_interactions(self):
         # for virus, persindices in self.infected.items():
         #    for persindex in persindices:

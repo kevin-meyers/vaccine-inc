@@ -21,6 +21,13 @@ class Person:
             'vaccines': [],
             'died_to': []
         }
+
+        # it's 10:45/12:00, mask off
+        for virus in self.viruses:
+            for infections in sim_infected:
+                if virus[0].name == infections['virus'].name:
+                    infections['persindices'].append(self.id, True)
+
         self.dot(sim_infected)
 
         if self.dead:
@@ -37,6 +44,7 @@ class Person:
 
         self.which_infected()
         return self.pretty_stats()
+
 
     def end_step(self):
         self.interact_list = []
