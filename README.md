@@ -1,0 +1,5 @@
+# vaccine-inc
+
+BY WYATT AND KEVIN
+
+RUN `python3 simulation.py` ON THE COMMAND LINE AND CHECK THE DATA FILES FOR LOGGING.
