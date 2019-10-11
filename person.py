@@ -64,6 +64,11 @@ class Person:
                     self.vaccinated.append(self.viruses[i][0])
                     self.stats['vaccines'].append(self.viruses[i][0].name)
                     delete_list.append(i)
+                
+                for infections in sim_infected:
+                    if viruses[i][0].name == infections['virus'].name:
+                        infections['persindices'].remove(self.id, True)
+                    
 
             for i in delete_list[::-1]:
                 self.viruses.pop(i)

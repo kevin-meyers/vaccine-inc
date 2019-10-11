@@ -4,6 +4,7 @@ from datetime import datetime
 from random import sample, random
 
 from person import Person
+from virus import Virus
 
 
 FIELD_NAMES = ['frame', 'id', 'status', 'infectors_dict', 'num_interactions',
@@ -48,11 +49,12 @@ class Simulation:
     sim_card: SimCard Object, holds all the information that a simulation needs to run.
     '''
 
-    def __init__(self, population, viruses, pop_density=100):
+    def __init__(self, population, viruses, pop_density=100, max_frames = 100):
         self.pop_size = population
         self.persons_list = []
         self.infected = []
         self.pop_density = pop_density  # how many people they interact with in a step
+        self.max_frames = max_frames
         self.frame_num = 0
         self.file_name = None
         self.viruses = viruses
@@ -130,3 +132,17 @@ class Simulation:
 
             if random() <= virus.vaccination_rate:
                 person.vaccinated.append(virus)
+
+if __name__ == "__main__":
+    ebola = Virus('ebola', 1, 10, .1, 4, .3)
+    e_sim = Simulation(1000, [ebola])
+    e_sim.sim_start()
+    endflag = False
+
+    while not endflag:
+        e_sim.next_frame()
+        if (len(e_sim.infected['persindices'].call_for_list()) == 0) or e_sim.frame_num >= e_sim.max_frames:
+            endflag = True
+    
+
+    
