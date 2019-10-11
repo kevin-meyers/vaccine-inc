@@ -156,7 +156,7 @@ class Simulation:
 
 if __name__ == '__main__':
     with open('viruses.json', 'r') as f:
-        viruses = [json.loads(line) for line in f]
+        viruses = [Virus(**json.loads(line)) for line in f]
 
     with open('simcard.json', 'r') as f:
         simcard = json.loads(f.read())
@@ -168,5 +168,8 @@ if __name__ == '__main__':
 
     while not endflag:
         e_sim.next_frame()
-        if (len(e_sim.infected['persindices'].call_for_list()) == 0) or e_sim.frame_num >= e_sim.max_frames:
+        for virus, persindices in e_sim.infected:
+            if len(persindices) >= 0:
+                break
+        else:
             endflag = True
