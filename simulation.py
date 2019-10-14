@@ -44,6 +44,20 @@ class Kewlist:
             if self.bools[i]:
                 self.list.append(i)
 
+def test_kool_init():
+    assert Kewlist(1).list[0] == False
+
+def test_kool_append():
+    k = Kewlist(3)
+    k.append(2)
+    assert k.list[2] == True
+
+def test_kool_remove():
+    k = Kewlist(3, True)
+    k.remove(2)
+    assert k.list[2] == False
+
+
 class Simulation:
     '''
     Runs a single simulation till there are no more infected.
@@ -134,6 +148,10 @@ class Simulation:
 
             if random() <= virus.vaccination_rate:
                 person.vaccinated.append(virus)
+
+
+
+
 
 
 if __name__ == '__main__':
