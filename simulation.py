@@ -65,7 +65,6 @@ def test_kool_rebuild():
 def test_kool_remove():
     k = Kewlist(3, True)
     k.remove(2)
-    print(k.list)
     assert 2 not in k.list
 
 
@@ -137,7 +136,6 @@ class Simulation:
             for persindex in sample(range(len(self.persons_list)), k=virus.num_infected):
                 the_chosen.append(persindex, True)
             the_chosen.rebuild()
-            print('The Chosen: ' + str(the_chosen.list))
             self.infected.append(
                 {
                     'virus': virus,
@@ -190,14 +188,12 @@ if __name__ == '__main__':
     endflag = False
 
     while not endflag:
-        print(e_sim.frame_num, e_sim.max_frames)
         if e_sim.frame_num >= e_sim.max_frames:
             break
         
         e_sim.next_frame()
         
         for vir_peoples in e_sim.infected:
-            print(vir_peoples['persindices'].call_for_list())
             if len(vir_peoples['persindices'].call_for_list()) > 0:
                 break
         else:
