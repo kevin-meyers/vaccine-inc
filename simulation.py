@@ -46,26 +46,27 @@ class Kewlist:
                 self.list.append(i)
 
 def test_kool_init():
-    assert Kewlist(1).list[0] == False
+    assert Kewlist(1).list == []
 
 def test_kool_append():
     k = Kewlist(3)
     k.append(2)
-    assert k.list[2] == True
+    assert k.list == [2]
 
 def test_kool_rebuild():
-    lst = [1,4,8,3]
+    lst = [1,0,1,3]
     kl = Kewlist(4)
     for li in lst:
         kl.append(li, True)
     kl.rebuild()
 
-    assert kl.list == [1,3,4,8]
+    assert kl.list == [0,1,3]
 
 def test_kool_remove():
     k = Kewlist(3, True)
     k.remove(2)
-    assert k.list[2] == False
+    print(k.list)
+    assert 2 not in k.list
 
 
 class Simulation:
