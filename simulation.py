@@ -19,6 +19,7 @@ class Kewlist:
     def __init__(self, length, start_val = False):
         self.list = []
         self.bools = [start_val] * length
+        self.rebuild()
 
     def call_for_list(self, build = True):
         if build:
@@ -51,6 +52,15 @@ def test_kool_append():
     k = Kewlist(3)
     k.append(2)
     assert k.list[2] == True
+
+def test_kool_rebuild():
+    lst = [1,4,8,3]
+    kl = Kewlist(4)
+    for li in lst:
+        kl.append(li, True)
+    kl.rebuild()
+
+    assert kl.list == [1,3,4,8]
 
 def test_kool_remove():
     k = Kewlist(3, True)
@@ -92,7 +102,6 @@ class Simulation:
         self.rebuild_viruses()
 
 
-
     def rebuild_viruses(self):
         for virus in self.infected:
             virus['persindices'].rebuild()
@@ -127,7 +136,7 @@ class Simulation:
             for persindex in sample(range(len(self.persons_list)), k=virus.num_infected):
                 the_chosen.append(persindex, True)
             the_chosen.rebuild()
-
+            print('The Chosen: ' + str(the_chosen.list))
             self.infected.append(
                 {
                     'virus': virus,
@@ -183,8 +192,9 @@ if __name__ == '__main__':
         print(e_sim.frame_num, e_sim.max_frames)
         if e_sim.frame_num >= e_sim.max_frames:
             break
-
+        
         e_sim.next_frame()
+        
         for vir_peoples in e_sim.infected:
             print(vir_peoples['persindices'].call_for_list())
             if len(vir_peoples['persindices'].call_for_list()) > 0:
