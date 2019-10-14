@@ -3,6 +3,7 @@
 class Virus:
     def __init__(self, name, infect_rate, num_infected, fatality_rate,
                  lifetime, vaccination_rate):
+        fatality_rate = fatality_rate if fatality_rate < 1 else .99
         self.name = name
         self.infect_rate = infect_rate
         self.num_infected = num_infected

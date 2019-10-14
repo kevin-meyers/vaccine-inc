@@ -155,34 +155,39 @@ class Simulation:
 
 
 if __name__ == '__main__':
-#    with open('viruses.json', 'r') as f:
-#        viruses = [Virus(**json.loads(line)) for line in f]
+    with open('viruses.json', 'r') as f:
+        viruses = [Virus(**json.loads(line)) for line in f]
 
-#    with open('simcard.json', 'r') as f:
-#        simcard = json.loads(f.read())
+    with open('simcard.json', 'r') as f:
+        simcard = json.loads(f.read())
 
-#    e_sim = Simulation(**simcard, viruses=viruses)
+    e_sim = Simulation(**simcard, viruses=viruses)
 
-    pop_size = int(argv[1])
-    vac_per = float(argv[2])
-    vir_name = argv[3]
-    fatality_rate = float(argv[4])
-    repr_rate = float(argv[5])
-    init_infect = int(argv[6])
+#    pop_size = int(argv[1])
+#    vac_per = float(argv[2])
+#    vir_name = argv[3]
+#    fatality_rate = float(argv[4])
+#    repr_rate = float(argv[5])
+#    init_infect = int(argv[6])
 
-    viruses = [Virus(vir_name, repr_rate, init_infect, fatality_rate, 4,
-                     vac_per)]
+#    viruses = [Virus(vir_name, repr_rate, init_infect, fatality_rate, 4,
+#                     vac_per)]
 
-    e_sim = Simulation(pop_size, viruses)
+#    e_sim = Simulation(pop_size, viruses)
 
 
     e_sim.sim_start()
     endflag = False
 
     while not endflag:
+        print(e_sim.frame_num, e_sim.max_frames)
+        if e_sim.frame_num >= e_sim.max_frames:
+            break
+
         e_sim.next_frame()
-        for virus, persindices in e_sim.infected:
-            if len(persindices) >= 0:
+        for vir_peoples in e_sim.infected:
+            print(vir_peoples['persindices'].call_for_list())
+            if len(vir_peoples['persindices'].call_for_list()) > 0:
                 break
         else:
             endflag = True
